@@ -27,6 +27,24 @@ pub fn encrypt(input_path: &str, output_path: &str) -> Result<(), Error> {
     let output_file = File::create(output_path)?;
     let mut writer = BufWriter::new(output_file);
     writer.write(&block)?;
-    println!("File successfully encrypyed");
+    println!("File successfully encrypted");
     Ok(())
+}
+
+pub fn decrypt(input_path: &str, output_path: &str) -> Result<(), Error> {
+    let input_file = File::open(&input_path)?;
+    let mut reader = BufReader::new(input_file);
+    let mut encrypted_content = vec![];
+    reader.read_to_end(&mut encrypted_content)?;
+    let key = Sha256::digest(b"J");
+    let nouce = GenericArray::from_slice(b"F6477DDFF97D263D");
+    let mut cipher = Aes256Ctr::new(&key, &nouce);
+    cipher.seek(0);
+    cipher.apply_keystream(&mut encrypted_content);
+    let output_file = File::create(&output_path)?;
+    let mut writer = BufWriter::new(output_file);
+    writer.write(&encrypted_content)?;
+    println!("File successfully decrypted");
+    Ok(())
+
 }

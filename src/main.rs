@@ -1,5 +1,4 @@
 use clap::{Arg, App};
-use sha2::{Sha256, Digest};
 mod cipher;
 fn main() {
     let matches = App::new("Encrypter")
@@ -36,14 +35,4 @@ fn main() {
     let output_path = matches.value_of("OUTPUT").unwrap();
     cipher::encrypt(&input_path, &output_path).unwrap();
     
-    /*
-    let output_file_again = File::open(&output_path).unwrap();
-    let mut reader_again = BufReader::new(output_file_again);
-    let mut encrypted_contents = vec![];
-    reader_again.read_to_end(&mut encrypted_contents).unwrap();
-    cipher.seek(0);
-    cipher.apply_keystream(&mut encrypted_contents);
-    println!("Lol decrypt");
-    println!("{}", "File successfully decrypted" );
-    */
 }
