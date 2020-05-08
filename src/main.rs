@@ -12,6 +12,7 @@ fn main() {
                        .value_name("MODE")
                        .help("Set mode")
                        .takes_value(true)
+                       .required(true)
                     )
                       .arg(Arg::with_name("INPUT")
                         .help("Set input file")
@@ -25,6 +26,11 @@ fn main() {
                     )
                     .get_matches();
 
+    let mode = matches.value_of("mode").unwrap();
+    match mode {
+        "encrypt" => (),
+        _ => panic!("Wrong mode")
+    }
     let input_path = matches.value_of("INPUT").unwrap();
     let output_path = matches.value_of("OUTPUT").unwrap();
     cipher::encrypt(&input_path, &output_path).unwrap();
