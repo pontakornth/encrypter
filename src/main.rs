@@ -27,12 +27,12 @@ fn main() {
                     .get_matches();
 
     let mode = matches.value_of("mode").unwrap();
-    match mode {
-        "encrypt" => (),
-        _ => panic!("Wrong mode")
-    }
     let input_path = matches.value_of("INPUT").unwrap();
     let output_path = matches.value_of("OUTPUT").unwrap();
-    cipher::encrypt(&input_path, &output_path).unwrap();
+    match mode {
+        "encrypt" => cipher::encrypt(&input_path, &output_path).unwrap(),
+        "decrypt" => cipher::decrypt(&input_path, &output_path).unwrap(),
+        _ => panic!("Wrong mode")
+    }
     
 }
