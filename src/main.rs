@@ -13,6 +13,7 @@ fn main() {
                        .help("Set mode")
                        .takes_value(true)
                        .required(true)
+                       .possible_values(&["encrypt", "decrypt"])
                     )
                       .arg(Arg::with_name("INPUT")
                         .help("Set input file")
