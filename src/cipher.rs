@@ -8,8 +8,8 @@ use aes_ctr::stream_cipher::{
 };
 use sha2::{Sha256, Digest};
 
-pub fn encrypt(input_path: &str, output_path: &str) -> Result<(), Error> {
-    let key = Sha256::digest(b"J");
+pub fn encrypt(input_path: &str, output_path: &str, raw_key: &str) -> Result<(), Error> {
+    let key = Sha256::digest(raw_key.as_bytes());
     let nouce = GenericArray::from_slice(b"F6477DDFF97D263D");
     let mut cipher = Aes256Ctr::new(&key, &nouce);
     let file = File::open(input_path)?;
@@ -31,12 +31,12 @@ pub fn encrypt(input_path: &str, output_path: &str) -> Result<(), Error> {
     Ok(())
 }
 
-pub fn decrypt(input_path: &str, output_path: &str) -> Result<(), Error> {
+pub fn decrypt(input_path: &str, output_path: &str, raw_key: &str) -> Result<(), Error> {
     let input_file = File::open(&input_path)?;
     let mut reader = BufReader::new(input_file);
     let mut encrypted_content = vec![];
     reader.read_to_end(&mut encrypted_content)?;
-    let key = Sha256::digest(b"J");
+    let key = Sha256::digest(raw_key.as_bytes());
     let nouce = GenericArray::from_slice(b"F6477DDFF97D263D");
     let mut cipher = Aes256Ctr::new(&key, &nouce);
     cipher.seek(0);

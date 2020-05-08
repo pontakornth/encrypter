@@ -1,4 +1,5 @@
 use clap::{Arg, App};
+use rpassword::read_password_from_tty;
 mod cipher;
 fn main() {
     let matches = App::new("Encrypter")
@@ -25,13 +26,15 @@ fn main() {
                         .index(2)
                     )
                     .get_matches();
-
+    let mut key = read_password_from_tty(Some(&"Please enter the key : ")).unwrap();
+    key = key.trim().to_string();
+    println!("Your key is {}",key);
     let mode = matches.value_of("mode").unwrap();
     let input_path = matches.value_of("INPUT").unwrap();
     let output_path = matches.value_of("OUTPUT").unwrap();
     match mode {
-        "encrypt" => cipher::encrypt(&input_path, &output_path).unwrap(),
-        "decrypt" => cipher::decrypt(&input_path, &output_path).unwrap(),
+        "encrypt" => cipher::encrypt(&input_path, &output_path, &key).unwrap(),
+        "decrypt" => cipher::decrypt(&input_path, &output_path, &key).unwrap(),
         _ => panic!("Wrong mode")
     }
     
